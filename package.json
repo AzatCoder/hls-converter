@@ -1,0 +1,15 @@
+{
+  "name": "hls-converter",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "dev": "node --watch index.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "envalid": "^8.0.0",
+    "fastify": "^4.28.0"
+  }
+}
