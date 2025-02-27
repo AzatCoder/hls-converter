@@ -7,8 +7,8 @@ const fastify = Fastify({
   logger: true
 });
 
-fastify.get('/', (req, rep) => {
-  const { videoPath, outPath } = req.query;
+fastify.post('/', (req, rep) => {
+  const { videoPath, outPath } = req.body;
   console.log({ videoPath, outPath });
 
   if (!videoPath || !outPath) {
@@ -33,14 +33,15 @@ fastify.get('/', (req, rep) => {
 
   console.log(`Executing: ${script}`);
 
-  exec(script, (err, stdout, stderr) => {
-    if (err) {
-      console.error(err);
+  exec(script, (error, stdout, stderr) => {
+    if (error) {
+      console.error(error);
+      return rep.status(500).send({ error });
     }
-    console.log(stdout);
-  });
 
-  rep.send({ msg: 'converting started!' });
+    console.log(stdout);
+    return rep.send({ msg: 'converted!' });
+  });
 });
 
 fastify.listen({
