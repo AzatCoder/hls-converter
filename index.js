@@ -8,7 +8,7 @@ const fastify = Fastify({
 });
 
 fastify.post('/', (req, rep) => {
-  const { videoPath, outPath } = req.body;
+  const { videoPath, outPath, requestUrlOnSuccess } = req.body;
   console.log({ videoPath, outPath });
 
   if (!videoPath || !outPath) {
@@ -36,12 +36,15 @@ fastify.post('/', (req, rep) => {
   exec(script, (error, stdout, stderr) => {
     if (error) {
       console.error(error);
-      return rep.status(500).send({ error });
+      return;
     }
 
-    console.log(stdout);
-    return rep.send({ msg: 'converted!' });
+    console.log({ stdout, requestUrlOnSuccess });
+
+    if (requestUrlOnSuccess) fetch(requestUrlOnSuccess);
   });
+
+  return rep.send({ msg: 'converting started' });
 });
 
 fastify.listen({
